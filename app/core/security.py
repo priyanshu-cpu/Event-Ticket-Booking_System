@@ -47,8 +47,8 @@ def create_token(data:dict):
 def verify_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        if not payload.get("sub")
-        raise credentials_exception
-        return payload
+        if not payload.get("sub"):
+            raise credentials_exception
+            return payload
     except JWTError:
         raise credentials_exception
