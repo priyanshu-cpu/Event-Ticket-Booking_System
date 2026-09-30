@@ -10,3 +10,7 @@ def create_venue(db: Session, name:str, location:str):
     db.refresh(venue)
 
     return venue
+
+
+def get_venue_by_name(db:Session, name:str):
+    return db.query(Venue).filter(Venue.name == name).first()
