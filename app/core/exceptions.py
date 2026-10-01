@@ -4,3 +4,7 @@ class ValueAlreadyExistsException(Exception):
 
 class NotFountException(Exception):
     pass
+
+
+class UserAlreadyExists(Exception):
+    pass
