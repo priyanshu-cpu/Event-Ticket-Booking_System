@@ -11,6 +11,14 @@ router = APIRouter(prefix="/venue", tags=["Venues"])
 
 
 
-@router.post("/create", response_model=VenueOut)
+@router.post("/create", response_model=VenueCreateResponse)
 def create_venue(venue: VenueCreate, db:Session = Depends(get_db)):
-    return venue_service.create_venue(db, venue)
+    try:
+        new_venue = venue_service.create_venue(db, venue)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    
+    return {
+        "message" : "venue created",
+        "data" : new_venue
+    }
