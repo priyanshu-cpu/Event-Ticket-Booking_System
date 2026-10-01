@@ -1,8 +1,8 @@
-"""initial setup
+"""initial mig
 
-Revision ID: 0b692c4ff635
+Revision ID: 64c2595f5bfd
 Revises: 
-Create Date: 2026-10-01 19:56:06.692681
+Create Date: 2026-10-01 20:35:23.522120
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0b692c4ff635'
+revision: str = '64c2595f5bfd'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -35,7 +35,8 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('location', sa.String(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name', 'location', name='uq_venue_name_location')
     )
     op.create_index(op.f('ix_venues_id'), 'venues', ['id'], unique=False)
     # ### end Alembic commands ###
