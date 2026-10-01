@@ -14,3 +14,7 @@ def create_venue(db: Session, name:str, location:str):
 
 def get_venue_by_name(db:Session, name:str):
     return db.query(Venue).filter(Venue.name == name).first()
+
+
+def get_venue_by_id(db:Session, id: int):
+    return db.query(Venue).filter(Venue.id == id).first()
