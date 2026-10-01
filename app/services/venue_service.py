@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.core.exceptions import ValueAlreadyExistsException
+from app.core.exceptions import ValueAlreadyExistsException, NotFountException
 
 from app.repositories import venue_repository
 from app.schemas.venue import VenueCreate
@@ -16,3 +16,10 @@ def create_venue(db:Session, venue_data:VenueCreate):
 
 
 
+def get_venues(db:Session):
+    venues = venue_repository.get_venues(db)
+
+    if venues is None:
+        raise NotFountException()
+
+    return venues

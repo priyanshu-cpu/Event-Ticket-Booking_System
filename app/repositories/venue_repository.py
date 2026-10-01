@@ -16,5 +16,6 @@ def get_venue_by_name_and_location(db:Session, name:str,location:str):
     return db.query(Venue).filter(Venue.name == name, Venue.location == location).first()
 
 
-def get_venue_by_id(db:Session, id: int):
-    return db.query(Venue).filter(Venue.id == id).first()
+
+def get_venues(db:Session):
+    return db.query(Venue).all()
