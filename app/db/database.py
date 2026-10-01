@@ -5,5 +5,4 @@ from app.core.config import settings
 
 engine = create_engine(settings.DATABASE_URL)
 
-class Base(declarative_base):
-    pass
+Base = declarative_base()
