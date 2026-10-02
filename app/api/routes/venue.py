@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, status, Depends
 from sqlalchemy.orm import Session
 
 
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/venue", tags=["Venues"])
 
 
 
-@router.post("/create", response_model=VenueCreateResponse)
+@router.post("/create", response_model=VenueCreateResponse, status_code=status.HTTP_201_CREATED)
 def create_venue(venue: VenueCreate, db:Session = Depends(get_db)):
     new_venue = venue_service.create_venue(db, venue)
 

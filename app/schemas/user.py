@@ -21,3 +21,8 @@ class UserOut(BaseModel):
 class UserCreateResponse(BaseModel):
     message: str
     data: UserOut
+
+
+class UserLoginSchema(BaseModel):
+    username: str
+    password: str
