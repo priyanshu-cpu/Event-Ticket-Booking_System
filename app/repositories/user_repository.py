@@ -28,3 +28,5 @@ def get_user_by_email(email:str, db:Session):
 
 def get_user_by_id(user_id: int, db:Session):
     return db.get(Users, user_id)
+
+

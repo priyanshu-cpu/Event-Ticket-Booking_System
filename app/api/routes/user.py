@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.schemas.user import UserBase, UserOut, UserCreateResponse
 from fastapi.security import OAuth2PasswordRequestForm
+from app.api.deps import get_current_user
+from app.models.user import Users
 
 from app.services import user_service
 
@@ -31,3 +33,6 @@ def login(payload: OAuth2PasswordRequestForm = Depends(), db:Session = Depends(g
     }
 
 
+@router.get("/me", response_model = UserOut)
+def get_user(db:Session = Depends(get_db), user: Users = Depends(get_current_user)):
+    return user_service.get_user_info(user, db)
