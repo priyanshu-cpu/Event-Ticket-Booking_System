@@ -20,10 +20,10 @@ def create_user(db:Session, user:UserBase):
         if existing_email:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="email already exists")
 
-
     pass_hash = generate_password_hash(user.password)
 
     return user_repository.create_user(user, pass_hash, db)
+
 
 
 def login_user(db:Session, payload:UserLoginSchema):
@@ -41,5 +41,13 @@ def login_user(db:Session, payload:UserLoginSchema):
     return token
 
 
+
 def get_user_info(user:Users, db:Session):
     return user_repository.get_user_by_id(user.id, db)
+
+
+
+def update_user(user:Users, form_data: UserBase, db:Session):
+    password_hash = generate_password_hash(form_data.password)
+    
+    return user_repository.update_user(user.id, form_data, password_hash,db)

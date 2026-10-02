@@ -5,11 +5,11 @@ from app.schemas.user import UserBase, UserOut, UserCreateResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from app.api.deps import get_current_user
 from app.models.user import Users
-
 from app.services import user_service
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
+
 
 
 @router.post("/register", response_model=UserCreateResponse, status_code=status.HTTP_201_CREATED)
@@ -33,6 +33,18 @@ def login(payload: OAuth2PasswordRequestForm = Depends(), db:Session = Depends(g
     }
 
 
+
 @router.get("/me", response_model = UserOut)
 def get_user(db:Session = Depends(get_db), user: Users = Depends(get_current_user)):
     return user_service.get_user_info(user, db)
+
+
+
+@router.put("/update", response_model = UserCreateResponse)
+def update_user(form_data:UserBase, db:Session = Depends(get_db), user: Users = Depends(get_current_user)):
+    updated_user = user_service.update_user(user, form_data, db)
+
+    return {
+        "message" : "user updated",
+        "data" : updated_user
+    }
