@@ -42,3 +42,10 @@ def update_user(user_id: int, form_data: UserBase, password_hash, db:Session):
     db.refresh(user)
 
     return user
+
+
+
+def delete_user(db:Session, user: Users):
+    db.delete(user)
+    db.commit()
+    return {}

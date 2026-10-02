@@ -48,3 +48,9 @@ def update_user(form_data:UserBase, db:Session = Depends(get_db), user: Users = 
         "message" : "user updated",
         "data" : updated_user
     }
+
+
+
+@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(db:Session = Depends(get_db), user:Users = Depends(get_current_user)):
+    return user_service.delete_user(db, user)

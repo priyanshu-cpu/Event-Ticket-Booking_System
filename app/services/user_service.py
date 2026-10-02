@@ -49,5 +49,10 @@ def get_user_info(user:Users, db:Session):
 
 def update_user(user:Users, form_data: UserBase, db:Session):
     password_hash = generate_password_hash(form_data.password)
-    
+
     return user_repository.update_user(user.id, form_data, password_hash,db)
+
+
+
+def delete_user(db:Session, user:Users):
+    return user_repository.delete_user(db, user)
