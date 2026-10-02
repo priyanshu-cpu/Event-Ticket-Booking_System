@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, UniqueConstraint
+from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 
@@ -11,4 +12,5 @@ class Venue(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String,nullable=False)
     location = Column(String, nullable=False)
-    
+
+    seat = relationship("Seat", back_populates="venue")
