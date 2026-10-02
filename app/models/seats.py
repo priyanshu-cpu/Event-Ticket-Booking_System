@@ -6,7 +6,7 @@ from app.db.database import Base
 class Seat(Base):
     __tablename__ = "seats"
 
-    __table_args__ = UniqueConstraint("venue_id", "row", "seat_number", name="uq_seat_venue_position")
+    __table_args__ = (UniqueConstraint("venue_id", "row", "seat_number", name="uq_seat_venue_position"),)
 
 
     id = Column(Integer, primary_key=True, index=True)
