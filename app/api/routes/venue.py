@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.core.exceptions import ValueAlreadyExistsException, NotFountException
+
 
 from app.db.session import get_db
 from app.schemas.venue import VenueCreateResponse, VenueOut, VenueCreate
@@ -14,20 +14,15 @@ router = APIRouter(prefix="/venue", tags=["Venues"])
 
 @router.post("/create", response_model=VenueCreateResponse)
 def create_venue(venue: VenueCreate, db:Session = Depends(get_db)):
-    try:
-        new_venue = venue_service.create_venue(db, venue)
-    except ValueAlreadyExistsException:
-        raise HTTPException(status_code=409, detail="Venue already exists")
-    
+    new_venue = venue_service.create_venue(db, venue)
+
     return {
         "message" : "venue created",
         "data" : new_venue
     }
 
 
+
 @router.get("/get", response_model=list[VenueOut])
 def get_venues(db:Session = Depends(get_db)):
-    try:
-        return venue_service.get_venues(db)
-    except NotFountException:
-        raise HTTPException(status_code=404, detail="No venues found")
+    return venue_service.get_venues(db)

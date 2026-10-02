@@ -13,8 +13,7 @@ class UserBase(BaseModel):
 class UserOut(BaseModel):
     id: int
     name: str
-    email: str 
-    password: str
+    email: str | None = None
     created_at: datetime
 
 

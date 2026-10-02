@@ -19,7 +19,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 
-pwd_context = PasswordHash()
+pwd_context = PasswordHash.recommended()
 
 
 
