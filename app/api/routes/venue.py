@@ -26,3 +26,8 @@ def create_venue(venue: VenueCreate, db:Session = Depends(get_db)):
 @router.get("/get", response_model=list[VenueOut])
 def get_venues(db:Session = Depends(get_db)):
     return venue_service.get_venues(db)
+
+
+@router.get("/get/{id}", response_model=VenueOut)
+def get_venue(id: int, db:Session = Depends(get_db)):
+    return venue_service.get_venue(id, db)

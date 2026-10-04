@@ -8,7 +8,7 @@ from app.models.user import Users
 from app.services import user_service
 
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(prefix="/user", tags=["Auth"])
 
 
 

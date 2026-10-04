@@ -23,3 +23,10 @@ def get_venues(db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No venues found")
 
     return venues
+
+
+def get_venue(id: int, db:Session):
+    venue =  venue_repository.get_venue_by_id(id, db)
+    if not venue:
+        raise HTTPException(status_code=404, detail="not found")
+    return venue

@@ -4,5 +4,5 @@ from app.schemas.seat import SeatBase
 
 
 
-def get_seats(db:Session):
-    return db.query(Seat).all()
+def get_seats(id: int, db:Session):
+    return db.query(Seat).filter(Seat.venue_id == id).all()

@@ -6,5 +6,5 @@ from app.schemas.seat import SeatBase
 
 
 
-def get_seats(db:session):
-    return seat_repository.get_seats(db)
+def get_seats(id: int, db:session):
+    return seat_repository.get_seats(id, db)

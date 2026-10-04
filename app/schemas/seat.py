@@ -10,7 +10,6 @@ class SeatBase(BaseModel):
 
 class SeatOut(BaseModel):
     id: int
-    venue_id: int
     row: str
     seat_number : int
 

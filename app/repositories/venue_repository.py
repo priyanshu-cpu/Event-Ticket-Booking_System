@@ -19,3 +19,8 @@ def get_venue_by_name_and_location(db:Session, name:str,location:str):
 
 def get_venues(db:Session):
     return db.query(Venue).all()
+
+
+
+def get_venue_by_id(id: int, db:Session):
+    return db.query(Venue).filter(Venue.id == id).first()

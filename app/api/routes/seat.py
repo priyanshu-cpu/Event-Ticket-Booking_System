@@ -12,10 +12,10 @@ from app.schemas.seat import SeatBase, SeatOut, SeatCreatResponse
 
 
 
-router = APIRouter(prefix="/seat", tags=["Seat"])
+router = APIRouter(prefix="/venue")
 
 
 
-@router.get("/seat", response_model=list[SeatOut])
-def get_seat(db:Session = Depends(get_db)):
-    return seat_service.get_seats(db)
+@router.get("/{id}/seat", response_model=list[SeatOut])
+def get_seat(id: int, db:Session = Depends(get_db)):
+    return seat_service.get_seats(id, db)
