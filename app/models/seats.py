@@ -14,4 +14,4 @@ class Seat(Base):
     row = Column(String, nullable=False)
     seat_number = Column(Integer, nullable=False)
 
-    venue = relationship("Venue",  back_populates="seats")
+    venue = relationship("Venue",  back_populates="seat")

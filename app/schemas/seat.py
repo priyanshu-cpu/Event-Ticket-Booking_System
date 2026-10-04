@@ -5,14 +5,14 @@ class SeatBase(BaseModel):
 
     venue_id: int
     row: str
-    seat_no : int
+    seat_number : int
 
 
 class SeatOut(BaseModel):
     id: int
     venue_id: int
     row: str
-    seat_no : int
+    seat_number : int
 
     model_config = ConfigDict(from_attributes=True)
 
