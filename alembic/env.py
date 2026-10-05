@@ -8,6 +8,7 @@ from app.db.database import Base
 from app.models.venue import Venue
 from app.models.user import Users
 from app.models.seats import Seat
+from app.models.event import Event
 
 from alembic import context
 

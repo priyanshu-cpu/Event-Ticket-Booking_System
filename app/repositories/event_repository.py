@@ -21,3 +21,7 @@ def create_event(data: EventBase, db:Session):
     db.refresh(new_event)
 
     return new_event
+
+
+def get_event_by_id(id:int, db:Session):
+    return db.get(Event, id)
