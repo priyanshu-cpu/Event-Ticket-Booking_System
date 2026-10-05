@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from datetime import date, time, datetime
 
 
-class EventCreate(BaseModel):
+class EventBase(BaseModel):
     venue_id: int
     name:str
     description: str | None = None
