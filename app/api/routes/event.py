@@ -1,0 +1,20 @@
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+from app.db.session import get_db
+from app.schemas.event import EventBase, EventOut, EventCreateResponse
+from app.models.event import Event
+from app.services import event_service
+
+
+
+router = APIRouter(prefix="/event", tags=["Events"])
+
+
+
+@router.post("/", response_model=EventCreateResponse, status_code=201)
+def create_event(data:EventBase, db:Session = Depends(get_db)):
+    event = event_service.create_event(data, db)
+    return{
+        "message" : "event created",
+        "data" : event
+    }
