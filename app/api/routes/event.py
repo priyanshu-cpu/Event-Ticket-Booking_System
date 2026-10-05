@@ -7,14 +7,18 @@ from app.services import event_service
 
 
 
-router = APIRouter(prefix="/event", tags=["Events"])
+router = APIRouter(prefix="/venue", tags=["Events"])
 
 
 
-@router.post("/", response_model=EventCreateResponse, status_code=201)
-def create_event(data:EventBase, db:Session = Depends(get_db)):
+@router.post("/event", response_model=EventCreateResponse, status_code=201)
+def create_event( data:EventBase, db:Session = Depends(get_db)):
     event = event_service.create_event(data, db)
     return{
         "message" : "event created",
         "data" : event
     }
+
+@router.get("/{venue_id}/event")
+def get_event(venue_id: int,db:Session = Depends(get_db)):
+    return event_service.get_event(venue_id, db)

@@ -8,4 +8,16 @@ from app.schemas.event import EventBase, EventCreateResponse, EventOut
 
 
 def create_event(data: EventBase, db:Session):
+    event = event_repository.get_event_by_id(data.venue_id, db)
+    if not event:
+        raise HTTPException(status_code=404, detail="no venue with id")
+
     return event_repository.create_event(data, db)
+
+
+def get_event(event_id: int, db:Session):
+    event = event_repository.get_event_by_id(event_id, db)
+    if not event:
+        raise HTTPException(status_code=404, detail="not found")
+
+    return event
