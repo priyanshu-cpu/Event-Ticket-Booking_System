@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+from typing import Annotated
 
 
 
@@ -16,11 +17,14 @@ class UserOut(BaseModel):
     email: str | None = None
     created_at: datetime
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 
 class UserCreateResponse(BaseModel):
     message: str
     data: UserOut
+
 
 
 class UserLoginSchema(BaseModel):

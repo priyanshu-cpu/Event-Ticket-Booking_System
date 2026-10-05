@@ -12,7 +12,7 @@ from app.schemas.seat import SeatBase, SeatOut, SeatCreatResponse
 
 
 
-router = APIRouter(prefix="/venue")
+router = APIRouter(prefix="/venue", tags=["Seats"])
 
 
 
