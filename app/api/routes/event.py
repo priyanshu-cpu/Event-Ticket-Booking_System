@@ -1,13 +1,12 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.schemas.event import EventBase, EventOut, EventCreateResponse
-from app.models.event import Event
 from app.services import event_service
 
 
 
-router = APIRouter(prefix="/venue", tags=["Events"])
+router = APIRouter(prefix="/venues", tags=["Events"])
 
 
 
@@ -26,7 +25,7 @@ def get_events(venue_id: int,db:Session = Depends(get_db)):
     return event_service.get_events(venue_id, db)
 
 
-@router.get("/events/{event_id}")
+@router.get("/events/{event_id}", response_model=EventOut)
 def get_event(event_id: int,db:Session = Depends(get_db)):
     return event_service.get_event(event_id, db)
 
@@ -42,6 +41,6 @@ def update_event(venue_id: int, event_id: int ,form_data: EventBase, db: Session
     }
 
 
-@router.delete("/{venue_id}/events/{event_id}")
+@router.delete("/events/{event_id}")
 def delete_event(event_id: int, db:Session = Depends(get_db)):
     return event_service.delete_event(event_id, db)

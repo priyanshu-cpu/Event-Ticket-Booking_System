@@ -8,7 +8,7 @@ from app.services import venue_service
 
 
 
-router = APIRouter(prefix="/venue", tags=["Venues"])
+router = APIRouter(prefix="/venues", tags=["Venues"])
 
 
 
