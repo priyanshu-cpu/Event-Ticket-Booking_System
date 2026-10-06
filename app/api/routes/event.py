@@ -19,6 +19,14 @@ def create_event( data:EventBase, db:Session = Depends(get_db)):
         "data" : event
     }
 
-@router.get("/{venue_id}/event")
+
+
+@router.get("/{venue_id}/event", response_model=list[EventOut])
 def get_event(venue_id: int,db:Session = Depends(get_db)):
     return event_service.get_event(venue_id, db)
+
+
+
+@router.put("/{venue_id}/event", response_model= EventCreateResponse)
+def update_event(venue_id: int, event_id: int ,form_data: EventBase, db: Session = Depends(get_db)):
+    return event_service.update_event(venue_id, event_id, form_data, db)

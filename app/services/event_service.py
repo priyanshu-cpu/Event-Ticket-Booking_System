@@ -21,3 +21,11 @@ def get_event(event_id: int, db:Session):
         raise HTTPException(status_code=404, detail="not found")
 
     return event
+
+
+def update_event(venue_id: int, event_id: int, form_data: EventBase, db:Session):
+    event = event_repository.get_event_by_id(event_id, db)
+    if not event:
+        raise HTTPException(status_code=404, detail="not found")
+
+    return event_repository.update(venue_id, event_id, form_data, db)
