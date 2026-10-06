@@ -7,8 +7,8 @@ from app.schemas.event import EventBase, EventCreateResponse, EventOut
 
 
 
-def create_event(data: EventBase, db:Session):
-    event = event_repository.get_event_by_id(data.venue_id, db)
+def create_event(venue_id: int, data: EventBase, db:Session):
+    event = event_repository.get_event_by_id(venue_id, db)
     if not event:
         raise HTTPException(status_code=404, detail="no venue with id")
 
@@ -38,7 +38,7 @@ def update_event(venue_id: int, event_id: int, form_data: EventBase, db:Session)
     if not event:
         raise HTTPException(status_code=404, detail="not found")
 
-    return event_repository.update(venue_id, event_id, form_data, db)
+    return event_repository.update_event(venue_id, event_id, form_data, db)
 
 
 def delete_event(event_id: int, db:Session):
