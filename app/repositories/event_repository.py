@@ -34,6 +34,7 @@ def get_events_by_venueId(venue_id, db:Session):
 def update_event(event_id: int, form_data: EventBase, db:Session):
     event = db.get(Event, event_id)
 
+
     event.venue_id = form_data.venue_id
     event.name = form_data.name
     event.description = form_data.description
@@ -46,3 +47,12 @@ def update_event(event_id: int, form_data: EventBase, db:Session):
     db.refresh(event)
 
     return event
+
+
+
+def delete_event(event_id: int, db: Session):
+    event = db.get(Event, event_id)
+
+    db.delete(event)
+    db.commit()
+    return {}

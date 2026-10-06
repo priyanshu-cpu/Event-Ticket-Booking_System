@@ -21,12 +21,24 @@ def create_event( data:EventBase, db:Session = Depends(get_db)):
 
 
 
-@router.get("/{venue_id}/event", response_model=list[EventOut])
-def get_event(venue_id: int,db:Session = Depends(get_db)):
-    return event_service.get_event(venue_id, db)
+@router.get("/{venue_id}/events", response_model=list[EventOut])
+def get_events(venue_id: int,db:Session = Depends(get_db)):
+    return event_service.get_events(venue_id, db)
+
+
+@router.get("/events/{event_id}")
+def get_event(event_id: int,db:Session = Depends(get_db)):
+    return event_service.get_event(event_id, db)
+
 
 
 
 @router.put("/{venue_id}/event", response_model= EventCreateResponse)
 def update_event(venue_id: int, event_id: int ,form_data: EventBase, db: Session = Depends(get_db)):
     return event_service.update_event(venue_id, event_id, form_data, db)
+
+
+
+@router.delete("/events/{event_id}")
+def delete_event(event_id: int, db:Session = Depends(get_db)):
+    return event_service.delete_event(event_id, db)
