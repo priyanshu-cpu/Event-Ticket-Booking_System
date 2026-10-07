@@ -15,3 +15,4 @@ class Seat(Base):
     seat_number = Column(Integer, nullable=False)
 
     venue = relationship("Venue",  back_populates="seat")
+    bookings = relationship("Booking", back_populates="seat")

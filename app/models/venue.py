@@ -14,3 +14,4 @@ class Venue(Base):
     location = Column(String, nullable=False)
 
     seat = relationship("Seat", back_populates="venue")
+    event = relationship("Event", back_populates="venue")

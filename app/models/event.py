@@ -16,3 +16,7 @@ class Event(Base):
     end_time        =    Column(Time, nullable=False)
     ticket_price    =    Column(Integer, nullable=False)
     created_at      =    Column(DateTime, default=lambda: datetime.now(UTC))
+
+    venue = relationship("Venue", back_populates="event")
+
+    bookings = relationship("Booking", back_populates="event")
