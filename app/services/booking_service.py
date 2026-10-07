@@ -33,3 +33,15 @@ def create_booking(
 
     new_booking = booking_repository.create_booking(form_data, user, db)
     return new_booking
+
+
+def get_bookings(user:Users, db:Session):
+    return booking_repository.get_bookings(user, db)
+
+
+def get_booking(booking_id, user, db):
+    booking = booking_repository.get_booking_by_id(booking_id, user, db)
+    if not booking:
+        raise HTTPException(status_code=404, detail="not found")
+
+    return booking

@@ -20,3 +20,13 @@ def create_booking(form_data: BookingBase, user:Users = Depends(get_current_user
         "message" : "booking created",
         "data": new_booking
     }
+
+
+@router.get("/",response_model=list[BookingOut])
+def get_bookings(user:Users = Depends(get_current_user), db:Session = Depends(get_db)):
+    return booking_service.get_bookings(user, db)
+
+
+@router.get("/{booking_id}", response_model=BookingOut)
+def get_booking(booking_id: int, user:Users =Depends(get_current_user), db:Session = Depends(get_db)):
+    return booking_service.get_booking(booking_id, user, db)
