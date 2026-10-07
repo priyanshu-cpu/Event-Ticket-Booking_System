@@ -16,5 +16,5 @@ class Booking(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
 
     seat = relationship("Seat", back_populates="bookings")
-    user = relationship("User", back_populates="bookings")
+    user = relationship("Users", back_populates="bookings")
     event = relationship("Event", back_populates="bookings")

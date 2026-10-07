@@ -1,0 +1,22 @@
+from fastapi import APIRouter, Depends
+from app.schemas.booking import BookingBase, BookingOut, BookingCreatedResponse
+
+from app.models.user import Users
+from sqlalchemy.orm import Session
+from app.api.deps import get_current_user
+from app.db.session import get_db
+from app.services import booking_service
+
+
+
+router = APIRouter(prefix="/bookings", tags=["Bookings"])
+
+
+@router.post("/post", response_model=BookingCreatedResponse, status_code=201)
+def create_booking(form_data: BookingBase, user:Users = Depends(get_current_user), db:Session = Depends(get_db)):
+    new_booking = booking_service.create_booking(form_data, user, db)
+
+    return{
+        "message" : "booking created",
+        "data": new_booking
+    }
