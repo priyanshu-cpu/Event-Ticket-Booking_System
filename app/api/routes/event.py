@@ -10,9 +10,9 @@ router = APIRouter(prefix="/venues", tags=["Events"])
 
 
 
-@router.post("/{venue_id}/events", response_model=EventCreateResponse, status_code=201)
-def create_event(venue_id:int, data:EventBase, db:Session = Depends(get_db)):
-    event = event_service.create_event(venue_id,data, db)
+@router.post("/events", response_model=EventCreateResponse, status_code=201)
+def create_event(data:EventBase, db:Session = Depends(get_db)):
+    event = event_service.create_event(data, db)
     return{
         "message" : "event created",
         "data" : event
