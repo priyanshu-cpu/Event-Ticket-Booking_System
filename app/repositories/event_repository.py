@@ -31,7 +31,7 @@ def get_events_by_venueId(venue_id, db:Session):
     return db.query(Event).filter(Event.venue_id == venue_id).all()
 
 
-def update_event(venue_id: int,event_id: int, form_data: EventBase, db:Session):
+def update_event(event_id: int, form_data: EventBase, db:Session):
     event = db.get(Event, event_id)
 
 

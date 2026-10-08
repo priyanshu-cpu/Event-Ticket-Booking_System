@@ -8,7 +8,7 @@ from app.models.user import Users
 from app.services import user_service
 
 
-router = APIRouter(prefix="/user", tags=["User"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
 
@@ -23,7 +23,7 @@ def create(user: UserBase, db:Session = Depends(get_db)):
 
 
 
-@router.post("/login")
+@router.post("/login", status_code=200)
 def login(payload: OAuth2PasswordRequestForm = Depends(), db:Session = Depends(get_db)):
     token = user_service.login_user(db,payload)
 
@@ -34,13 +34,13 @@ def login(payload: OAuth2PasswordRequestForm = Depends(), db:Session = Depends(g
 
 
 
-@router.get("/me", response_model = UserOut)
+@router.get("/me", response_model = UserOut, status_code=200)
 def get_user(db:Session = Depends(get_db), user: Users = Depends(get_current_user)):
     return user_service.get_user_info(user, db)
 
 
 
-@router.put("/update", response_model = UserCreateResponse)
+@router.put("/me", response_model = UserCreateResponse, status_code=200)
 def update_user(form_data:UserBase, db:Session = Depends(get_db), user: Users = Depends(get_current_user)):
     updated_user = user_service.update_user(user, form_data, db)
 
@@ -51,6 +51,6 @@ def update_user(form_data:UserBase, db:Session = Depends(get_db), user: Users = 
 
 
 
-@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(db:Session = Depends(get_db), user:Users = Depends(get_current_user)):
     return user_service.delete_user(db, user)

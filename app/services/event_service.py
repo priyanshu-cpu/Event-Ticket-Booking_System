@@ -32,12 +32,12 @@ def get_event(event_id, db):
 
 
 
-def update_event(venue_id: int, event_id: int, form_data: EventBase, db:Session):
+def update_event(event_id: int, form_data: EventBase, db:Session):
     event = event_repository.get_event_by_id(event_id, db)
     if not event:
         raise HTTPException(status_code=404, detail="not found")
 
-    return event_repository.update_event(venue_id, event_id, form_data, db)
+    return event_repository.update_event(event_id, form_data, db)
 
 
 def delete_event(event_id: int, db:Session):
