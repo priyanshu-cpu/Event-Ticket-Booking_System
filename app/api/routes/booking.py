@@ -12,6 +12,7 @@ from app.services import booking_service
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
 
+
 @router.post("/post", response_model=BookingCreatedResponse, status_code=201)
 def create_booking(form_data: BookingBase, user:Users = Depends(get_current_user), db:Session = Depends(get_db)):
     new_booking = booking_service.create_booking(form_data, user, db)
@@ -22,9 +23,11 @@ def create_booking(form_data: BookingBase, user:Users = Depends(get_current_user
     }
 
 
+
 @router.get("/",response_model=list[BookingOut])
 def get_bookings(user:Users = Depends(get_current_user), db:Session = Depends(get_db)):
     return booking_service.get_bookings(user, db)
+
 
 
 @router.get("/{booking_id}", response_model=BookingOut)

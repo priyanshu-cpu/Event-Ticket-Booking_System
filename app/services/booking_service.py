@@ -35,8 +35,10 @@ def create_booking(
     return new_booking
 
 
+
 def get_bookings(user:Users, db:Session):
     return booking_repository.get_bookings(user, db)
+
 
 
 def get_booking(booking_id, user, db):

@@ -21,12 +21,15 @@ def create_booking(form_data: BookingBase, user: Users, db: Session):
     return new_booking
 
 
+
 def get_booking_by_event_and_seat(event_id:int, seat_id: int, db:Session):
     return db.query(Booking).filter(Booking.event_id == event_id, Booking.seat_id == seat_id).first()
 
 
+
 def get_bookings(user:Users, db:Session):
     return db.query(Booking).filter(Booking.user_id == user.id).all()
+
 
 
 def get_booking_by_id(booking_id: int, user:Users, db:Session):
