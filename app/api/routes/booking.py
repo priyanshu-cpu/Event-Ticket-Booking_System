@@ -33,3 +33,8 @@ def get_bookings(user:Users = Depends(get_current_user), db:Session = Depends(ge
 @router.get("/{booking_id}", response_model=BookingOut)
 def get_booking(booking_id: int, user:Users =Depends(get_current_user), db:Session = Depends(get_db)):
     return booking_service.get_booking(booking_id, user, db)
+
+
+@router.delete("/{booking_id}", status_code=201)
+def delete_booking(booking_id: int, user:Users =Depends(get_current_user), db:Session =Depends(get_db)):
+    return booking_service.delete_booking(booking_id, user, db)

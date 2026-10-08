@@ -47,3 +47,13 @@ def get_booking(booking_id, user, db):
         raise HTTPException(status_code=404, detail="not found")
 
     return booking
+
+
+
+def delete_booking(booking_id: int, user: Users, db:Session):
+    booking = booking_repository.get_booking_by_id(booking_id, user, db)
+
+    if not booking:
+        raise HTTPException(status_code=404, detail="not found")
+
+    booking_repository.delete_booking(booking, db)

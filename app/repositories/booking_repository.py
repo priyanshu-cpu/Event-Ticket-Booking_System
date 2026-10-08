@@ -34,3 +34,10 @@ def get_bookings(user:Users, db:Session):
 
 def get_booking_by_id(booking_id: int, user:Users, db:Session):
     return db.query(Booking).filter(Booking.id == booking_id, Booking.user_id == user.id).first()
+
+
+def delete_booking(booking, db:Session):
+    
+    db.delete(booking)
+    db.commit()
+    return {}
