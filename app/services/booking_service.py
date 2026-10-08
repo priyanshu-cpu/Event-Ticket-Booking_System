@@ -19,7 +19,7 @@ def create_booking(
     if not event:
         raise HTTPException(status_code=404, detail="event not found")
 
-    seat = seat_repository.get_seat_by_id(form_data.seat_id, db)
+    seat = seat_repository.get_seat_for_update(form_data.seat_id, db)
     if not seat:
         raise HTTPException(status_code=404, detail="seat not found")
 

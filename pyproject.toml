@@ -12,5 +12,6 @@ dependencies = [
     "pydantic-settings>=2.15.0",
     "python-jose>=3.5.0",
     "python-multipart>=0.0.32",
+    "redis>=8.1.0",
     "sqlalchemy>=2.1.1",
 ]

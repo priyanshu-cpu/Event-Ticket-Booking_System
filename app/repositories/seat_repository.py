@@ -10,3 +10,12 @@ def get_seats(id: int, db:Session):
 
 def get_seat_by_id(seat_id: int, db:Session):
     return db.query(Seat).filter(Seat.id == seat_id).first()
+
+
+def get_seat_for_update(seat_id: int, db: Session):
+    return (
+        db.query(Seat)
+        .filter(Seat.id == seat_id)
+        .with_for_update()
+        .first()
+    )
