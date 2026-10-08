@@ -16,6 +16,6 @@ router = APIRouter(prefix="/venues", tags=["Seats"])
 
 
 
-@router.get("/{venue_id}/seat", response_model=list[SeatOut])
+@router.get("/{venue_id}/seats", response_model=list[SeatOut])
 def get_seat(venue_id: int, db:Session = Depends(get_db)):
     return seat_service.get_seats(venue_id, db)

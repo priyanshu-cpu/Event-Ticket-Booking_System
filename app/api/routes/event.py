@@ -25,7 +25,7 @@ def get_events(venue_id: int,db:Session = Depends(get_db)):
     return event_service.get_events(venue_id, db)
 
 
-@router.get("{event_id}", response_model=EventOut)
+@router.get("/{event_id}", response_model=EventOut)
 def get_event(event_id: int,db:Session = Depends(get_db)):
     return event_service.get_event(event_id, db)
 
