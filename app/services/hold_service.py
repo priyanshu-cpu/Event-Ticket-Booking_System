@@ -11,7 +11,7 @@ def hold_seat(event_id: int, seat_id: int, user_id: int):
     result = redis_client.set(
         key,
         user_id,
-        nx=True
+        nx=True,
         ex=HOLD_DURATION
     )
 
