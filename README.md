@@ -252,14 +252,9 @@ Event 1 ──── * Booking * ──── 1 User
 - [x] Dockerize the application
 - [ ] Redis-backed seat holds with expiry
 - [ ] Booking confirmation and status lifecycle
-- [ ] Seat management endpoints
 - [ ] Admin roles and permissions
-- [ ] Consistent route naming and versioning (`/api/v1`)
-- [ ] Centralized exception handling
-- [ ] Input validation (prices, event times)
 - [ ] Unit and integration tests
 - [ ] Payment integration
-- [ ] CI/CD pipeline
 - [ ] *To be decided…*
 
 ---
