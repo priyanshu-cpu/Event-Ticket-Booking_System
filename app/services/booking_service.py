@@ -7,7 +7,7 @@ from app.schemas.booking import BookingBase
 from app.models.user import Users
 from app.models.bookings import Booking
 
-
+from app.services.hold_service import hold_seat, release_seat
 
 
 def create_booking(
@@ -28,11 +28,30 @@ def create_booking(
 
     booking = booking_repository.get_booking_by_event_and_seat(form_data.event_id, form_data.seat_id, db)
     if booking:
-        if not booking.status == "available":
-            raise HTTPException(status_code=400, detail="seat is not available")
+        db.rollback()
+        raise HTTPException(status_code=409, detail="seat is held or booked")
 
-    new_booking = booking_repository.create_booking(form_data, user, db)
-    return new_booking
+
+    acquired = hold_seat(form_data.event_id, form_data.seat_id, user.id)
+
+    if not acquired:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="seat is temporarily held by another user")
+
+
+    try:
+        new_booking = booking_repository.create_booking(form_data, user, db, status="held", commit=False)
+        db.commit()
+        db.refresh(new_booking)
+        return new_booking
+
+    except Exception:
+        db.rollback()
+        release_seat(
+            form_data.event_id,
+            form_data.seat_id,
+            user.id
+        )
 
 
 

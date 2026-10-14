@@ -7,16 +7,19 @@ from app.models.event import Event
 from app.models.venue import Venue
 
 
-def create_booking(form_data: BookingBase, user: Users, db: Session):
+def create_booking(form_data: BookingBase, user: Users, db: Session, status: str = "held", commit: bool = True):
     new_booking = Booking(
         user_id=user.id, 
         event_id=form_data.event_id, 
-        seat_id=form_data.seat_id
+        seat_id=form_data.seat_id,
+        status = status
     )
 
     db.add(new_booking)
-    db.commit()
-    db.refresh(new_booking)
+    db.flush()
+    if commit:
+        db.commit()
+        db.refresh(new_booking)
 
     return new_booking
 
@@ -41,3 +44,13 @@ def delete_booking(booking, db:Session):
     db.delete(booking)
     db.commit()
     return {}
+
+
+def get_active_booking(event_id: int, seat_id: int, db:Session):
+    booking = db.query(Booking).filter(
+        Booking.event_id == event_id,
+        Booking.seat_id ==seat_id,
+        Booking.status.in_(["held", "confirmed"])
+    ).first()
+
+    return booking
