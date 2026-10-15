@@ -6,6 +6,7 @@ from app.repositories import seat_repository
 from app.schemas.booking import BookingBase
 from app.models.user import Users
 from app.models.bookings import Booking
+from datetime import datetime, UTC, timedelta
 
 from app.services.hold_service import hold_seat, release_seat
 
@@ -15,6 +16,7 @@ def create_booking(
         user:Users,
         db:Session
 ):
+
     event = event_repository.get_event_by_id(form_data.event_id, db)
     if not event:
         raise HTTPException(status_code=404, detail="event not found")
@@ -25,6 +27,8 @@ def create_booking(
 
     if not seat.venue_id == event.venue_id:
         raise HTTPException(status_code=400, detail="Seat does not belogs to the event!")
+
+    check_expired_booking(form_data.event_id, form_data.seat_id, db)
 
     booking = booking_repository.get_booking_by_event_and_seat(form_data.event_id, form_data.seat_id, db)
     if booking:
@@ -40,7 +44,8 @@ def create_booking(
 
 
     try:
-        new_booking = booking_repository.create_booking(form_data, user, db, status="held", commit=False)
+        expires = datetime.now(UTC) + timedelta(minutes=10)
+        new_booking = booking_repository.create_booking(form_data, user, db, expires, status="held", commit=False)
         db.commit()
         db.refresh(new_booking)
         return new_booking
@@ -76,3 +81,9 @@ def delete_booking(booking_id: int, user: Users, db:Session):
         raise HTTPException(status_code=404, detail="not found")
 
     booking_repository.delete_booking(booking, db)
+
+
+
+def check_expired_booking(event_id:int, seat_id: int, db:Session):
+    current_time = datetime.now(UTC)
+    return booking_repository.check_expired_booking(event_id, seat_id, db, current_time, status = "held")
