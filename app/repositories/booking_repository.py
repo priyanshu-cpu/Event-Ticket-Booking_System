@@ -81,3 +81,10 @@ def check_expired_booking(event_id:int, seat_id: int, db: Session, current_time,
     )
 
     return update_count
+
+
+
+def update_booking_status(booking:Booking, status:str, db:Session):
+    booking.status = status
+    db.flush()
+    return booking

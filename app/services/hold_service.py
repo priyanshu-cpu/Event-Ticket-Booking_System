@@ -28,8 +28,8 @@ def release_seat(event_id: int, seat_id: int, user_id: int):
 
     script = """
     if redis.call('GET', KEYS[1]) == ARGV[1] then
-        return redis.call('DEL', 'KEYS[1]')
-    else:
+        return redis.call('DEL', KEYS[1])
+    else
         return 0
     end
     """

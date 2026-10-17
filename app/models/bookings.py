@@ -12,8 +12,8 @@ class Booking(Base):
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
     seat_id = Column(Integer, ForeignKey("seats.id"), nullable=False)
     status = Column(String, nullable=False, default="pending")
-    hold_expires_at = Column(DateTime, nullable=True, default=None)
-    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    hold_expires_at = Column(DateTime(timezone=True), nullable=True, default=None)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
 
     seat = relationship("Seat", back_populates="bookings")
     user = relationship("Users", back_populates="bookings")

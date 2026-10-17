@@ -60,6 +60,57 @@ def create_booking(
 
 
 
+def confirm_booking(
+        booking_id: int,
+        user:Users,
+        db:Session
+):
+    booking = booking_repository.get_booking_by_id(booking_id,user, db)
+
+    if not booking:
+        raise HTTPException(status_code=404, detail="booking not found")
+
+    if booking.user_id !=  user.id:
+        raise HTTPException(status_code=403, detail="You can not confirm another user's booking")
+
+    if booking.status != "held":
+        raise HTTPException(status_code=400, detail=f"Can not confirm booking with staus '{booking.status}'")
+
+    current_time = datetime.now(UTC)
+
+    if (
+        booking.hold_expires_at is None
+        or booking.hold_expires_at <= current_time
+    ):
+        booking_repository.update_booking_status(booking, "expired", db)
+        db.commit()
+
+        release_seat(booking.event_id, booking.seat_id, user.id)
+        raise HTTPException(status_code=400,detail="Booking hold hase expired")
+
+    try:
+        paymeny_success =True
+
+        if not paymeny_success:
+            raise HTTPException(status_code=400, detail="payment failed")
+
+        booking_repository.update_booking_status(booking, "confirmed", db)
+
+        db.commit()
+        db.refresh(booking)
+
+    except Exception:
+        db.rollback()
+        raise
+
+
+    release_seat(booking.event_id, booking.seat_id, user.id)
+
+    return booking
+
+
+
+
 def get_bookings(user:Users, db:Session):
     return booking_repository.get_bookings(user, db)
 
