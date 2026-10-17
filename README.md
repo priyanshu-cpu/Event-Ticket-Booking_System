@@ -250,7 +250,7 @@ Event 1 ──── * Booking * ──── 1 User
 - [x] Seat listing
 - [x] Basic booking flow
 - [x] Dockerize the application
-- [ ] Redis-backed seat holds with expiry
+- [x] Redis-backed seat holds with expiry
 - [ ] Booking confirmation and status lifecycle
 - [ ] Admin roles and permissions
 - [ ] Unit and integration tests
