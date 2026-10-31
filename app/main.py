@@ -1,6 +1,7 @@
-def main():
-    print("Hello from etbs-again!")
+from fastapi import FastAPI
 
 
-if __name__ == "__main__":
-    main()
+
+
+app = FastAPI(title="Event ticket booking system")
+
