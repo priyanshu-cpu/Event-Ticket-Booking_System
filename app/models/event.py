@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, Boolean, ForeignKey, String, Enum as SAEnum
 from app.db.database import Base
-from datetime import datetime, UTC
+from datetime import datetime
 from app.models.enums import EventStatus
 
 
@@ -16,7 +16,7 @@ class Event(Base):
     status : Mapped[EventStatus] = mapped_column(SAEnum(EventStatus, name = "event_status"),default=EventStatus.draft, server_default="draft")
 
 
-    venue : Mapped[Venue] = relationship(back_populates="events")
-    event_seats: Mapped[list[EventSeat]] = relationship(back_populates="event")
+    # venue : Mapped[Venue] = relationship(back_populates="events")
+    # event_seats: Mapped[list[EventSeat]] = relationship(back_populates="event")
 
 
