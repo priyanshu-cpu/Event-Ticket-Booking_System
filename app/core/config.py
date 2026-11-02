@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
     DB_CONNECTION: SecretStr
     ALGORITHM:str = "HS256"
-    SECRET_KEY: SecretStr | None = None
+    SECRET_KEY: SecretStr
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
 settings = Settings()

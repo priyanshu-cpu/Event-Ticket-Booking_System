@@ -15,14 +15,17 @@ credentials_exception = HTTPException(
 )
 
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="api/users/login")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="api/users/token")
 
 
 password_hash = PasswordHash.recommended()
 
 
+
 def generate_password_hash(password: str) -> str:
     return password_hash.hash(password)
+
+DUMMY_HASH = generate_password_hash("dummy-password-for-timing")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -38,6 +41,7 @@ def create_token(data: dict, expires_delta: timedelta | None = None) -> str:
         expire = datetime.now(UTC) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
+    to_encode.update({"exp" : expire})
 
     token = jwt.encode(
         to_encode, settings.SECRET_KEY.get_secret_value(), settings.ALGORITHM
