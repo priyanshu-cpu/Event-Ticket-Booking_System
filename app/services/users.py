@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.concurrency import run_in_threadpool
 from app.models.user import User
 from app.schemas.users import UserCreate
-from app.core.exceptions import EmailAlreadyExists
+from app.core.exceptions import EmailAlreadyExists, InvalidCredentials
 from app.utils.security import generate_password_hash, verify_password, create_token, get_current_user
 
 
@@ -24,3 +24,16 @@ async def add_user(data:UserCreate, db:AsyncSession) -> User:
         await db.rollback()
         raise EmailAlreadyExists(email)
     return user
+
+
+
+async def login_user(form_data, db:AsyncSession):
+    existing = await user_repo.get_by_email(form_data.username, db)
+    if existing is None:
+        raise InvalidCredentials
+
+    if not verify_password(form_data.password, existing.password_hash):
+        raise InvalidCredentials
+
+    token = create_token({"sub" : str(existing.id)})
+    return token
