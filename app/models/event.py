@@ -6,6 +6,7 @@ from app.models.enums import EventStatus
 
 
 
+
 class Event(Base):
     __tablename__ = "events"
 
@@ -16,7 +17,7 @@ class Event(Base):
     status : Mapped[EventStatus] = mapped_column(SAEnum(EventStatus, name = "event_status"),default=EventStatus.draft, server_default="draft")
 
 
-    # venue : Mapped[Venue] = relationship(back_populates="events")
+    venue: Mapped["Venue"]= relationship(back_populates="events")
     # event_seats: Mapped[list[EventSeat]] = relationship(back_populates="event")
 
 
