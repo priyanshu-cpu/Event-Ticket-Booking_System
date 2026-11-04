@@ -7,8 +7,10 @@ from datetime import datetime, UTC
 class EventBase(BaseModel):
     venue_id: int
     name : str = Field(min_length=1)
+    description: str
+    ticket_price: int
 
-
+    
 class EventCreate(EventBase):
     pass
 
