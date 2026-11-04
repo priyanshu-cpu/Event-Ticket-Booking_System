@@ -4,7 +4,7 @@ from app.core.exceptions import NotFound
 
 
 async def get_events(venue_id: int, db: AsyncSession):
-    events = await event_repo.get_events(venue_id, db)
+    events = await event_repo.get_events_by_venue_id(venue_id, db)
     if events is None:
         raise NotFound
     return events
