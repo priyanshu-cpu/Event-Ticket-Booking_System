@@ -3,6 +3,8 @@ from logging.config import fileConfig
 from app.models.user import User
 from app.models.venue import Venue
 from app.models.event import Event
+from app.models.seats import Seat
+
 
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection

@@ -13,4 +13,5 @@ class Venue(Base):
     name : Mapped[str] = mapped_column(String(100))
     location: Mapped[str] = mapped_column(String(100))
 
-    events: Mapped["Event"] = relationship(back_populates="venue")
+    seats: Mapped["Seat"] = relationship(back_populates="venue")
+    event: Mapped["Event"] = relationship(back_populates="venue")
