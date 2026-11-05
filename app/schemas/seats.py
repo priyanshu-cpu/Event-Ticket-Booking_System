@@ -9,4 +9,3 @@ class SeatResponse(SeatBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    venue_id: int

@@ -24,5 +24,5 @@ async def get_venue(venue_id: int, db:DbSession):
     try:
         venue = await venue_service.get_venue(venue_id, db)
     except NotFound:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Venue not found")
     return venue

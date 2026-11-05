@@ -19,7 +19,7 @@ async def get_events(venue_id:int, db:DbSession):
     try:
         events = await event_service.get_events(venue_id, db)
     except NotFound:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Venue not found")
     return events
 
 
@@ -28,5 +28,5 @@ async def get_event_by_id(event_id: int, db:DbSession):
     try:
         event = await event_service.get_event(event_id, db)
     except NotFound:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
     return event
