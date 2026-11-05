@@ -8,13 +8,13 @@ from app.core.exceptions import NotFound
 
 
 
-router = APIRouter(prefix="/api/venue", tags=["events"])
+router = APIRouter(prefix="/api", tags=["events"])
 
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
 
 
-@router.get("/{venue_id}/events", response_model=list[EventResponse])
+@router.get("/venue/{venue_id}/events", response_model=list[EventResponse])
 async def get_events(venue_id:int, db:DbSession):
     try:
         events = await event_service.get_events(venue_id, db)
@@ -23,7 +23,7 @@ async def get_events(venue_id:int, db:DbSession):
     return events
 
 
-@router.get("/{event_id}", response_model=EventResponse)
+@router.get("/event/{event_id}", response_model=EventResponse)
 async def get_event_by_id(event_id: int, db:DbSession):
     try:
         event = await event_service.get_event(event_id, db)
