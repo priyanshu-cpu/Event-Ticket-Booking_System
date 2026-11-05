@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from app.models.enums import EventStatus
-from datetime import datetime, UTC
+from datetime import datetime
 
 
 
@@ -15,6 +15,8 @@ class EventCreate(EventBase):
     pass
 
 class EventResponse(EventBase):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     status: EventStatus
     starts_at: datetime

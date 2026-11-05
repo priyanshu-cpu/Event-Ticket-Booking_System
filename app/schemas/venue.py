@@ -11,4 +11,6 @@ class VenueCreate(VenueBase):
 
 
 class VenueResponse(VenueBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
