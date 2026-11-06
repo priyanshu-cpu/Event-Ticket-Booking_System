@@ -19,6 +19,6 @@ class Event(Base):
     ticket_price: Mapped[int] = mapped_column(Integer, default=99)
 
 
-    venue: Mapped["Venue"]= relationship(back_populates="events")
-
+    venue: Mapped["Venue"]= relationship(back_populates="event")
+    booking: Mapped["Booking"] = relationship(back_populates="event")
 

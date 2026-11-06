@@ -1,0 +1,55 @@
+1. Store the allowed person in config, not in code
+
+python
+# app/core/config.py
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    OWNER_EMAIL: str  # or OWNER_USER_ID: int
+
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
+# .env
+OWNER_EMAIL=you@example.com
+
+2. Write a dependency that checks it
+
+python
+# app/api/deps.py
+from fastapi import Depends, HTTPException, status
+from app.core.config import settings
+from app.api.deps import get_current_user  # your existing JWT/auth dependency
+from app.models.user import User
+
+async def require_owner(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.email != settings.OWNER_EMAIL:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not allowed to access this resource",
+        )
+    return current_user
+
+Unauthenticated users are already rejected by get_current_user (401). Logged-in users who aren’t the owner get 403.
+
+3. Protect routes with it
+
+A single route:
+
+python
+@router.post("/venues")
+async def create_venue(data: VenueCreate, user: User = Depends(require_owner), db=Depends(get_db)):
+    ...
+
+Or a whole router at once:
+
+python
+# app/api/routers/manage.py
+router = APIRouter(prefix="/api/manage", dependencies=[Depends(require_owner)])
+
+@router.post("/venues")
+async def create_venue(...): ...
+
+@router.delete("/events/{event_id}")
+async def delete_event(...): ...

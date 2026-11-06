@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, Boolean, ForeignKey
 from app.db.database import Base
 from datetime import datetime, UTC
@@ -12,3 +12,4 @@ class User(Base):
     password_hash:Mapped[str] = mapped_column(nullable=False)
     created_at : Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
 
+    booking : Mapped["Booking"] = relationship(back_populates="user")
