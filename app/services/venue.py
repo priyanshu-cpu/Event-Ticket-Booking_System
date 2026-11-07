@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.exceptions import NotFound
 from app.schemas.venue import VenueCreate
 from app.models.user import User
-from app.core.exceptions import VenueAlreadyExists, Unauthorized
+from app.core.exceptions import AlreadyExists, Unauthorized
 from app.core.config import settings
 
 
@@ -27,7 +27,7 @@ async def create_venue(venue_data:VenueCreate, user: User, db:AsyncSession):
     existing_venue = await venue_repo.get_venue_by_name_location(venue_data.name, venue_data.location, db)
 
     if existing_venue:
-        raise VenueAlreadyExists
+        raise AlreadyExists
 
     venue = await venue_repo.create_venue(venue_data.name, venue_data.location, db)
     return venue

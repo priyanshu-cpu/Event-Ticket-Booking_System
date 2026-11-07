@@ -12,7 +12,8 @@ class EventBase(BaseModel):
 
     
 class EventCreate(EventBase):
-    pass
+    starts_at: datetime
+
 
 class EventResponse(EventBase):
     model_config = ConfigDict(from_attributes=True)
@@ -20,3 +21,12 @@ class EventResponse(EventBase):
     id: int
     status: EventStatus
     starts_at: datetime
+
+
+
+class EventUpdate(BaseModel):
+    name: str | None = None
+    venue_id : int | None = None
+    description: str | None = None
+    ticket_price: int | None = None
+    starts_at : datetime | None = None

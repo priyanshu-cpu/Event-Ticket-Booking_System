@@ -14,7 +14,7 @@ class NotFound(Exception):
     pass
 
 
-class VenueAlreadyExists(Exception):
+class AlreadyExists(Exception):
     pass
 
 class Unauthorized(Exception):
