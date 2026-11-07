@@ -15,4 +15,4 @@ class Seat(Base):
     seat_number: Mapped[int]
 
     venue: Mapped["Venue"] = relationship(back_populates="seat")
-    booking : Mapped["booking"] = relationship(back_populates="seat")
+    booking : Mapped["Booking"] = relationship(back_populates="seat")

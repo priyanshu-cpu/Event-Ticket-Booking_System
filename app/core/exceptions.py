@@ -12,3 +12,10 @@ class InvalidCredentials(Exception):
 
 class NotFound(Exception):
     pass
+
+
+class VenueAlreadyExists(Exception):
+    pass
+
+class Unauthorized(Exception):
+    pass
