@@ -4,7 +4,7 @@ from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from app.services import events as event_service
-from app.core.exceptions import NotFound, Unauthorized
+from app.core.exceptions import NotFound, Unauthorized, DoesntExist
 from app.models.user import User 
 from app.utils.security import get_current_user
 
@@ -57,9 +57,14 @@ async def delete_event(event_id: int, db:DbSession, user: CurrentUser):
     return result
 
 
-@router.patch("/event_id", response_model=EventResponse)
+@router.patch("/event/{event_id}", response_model=EventResponse)
 async def update_event(event_id: int, event_data: EventUpdate, db:DbSession, user: CurrentUser):
     try:
         result = await event_service.update_event(event_id, event_data, db, user)
     except Unauthorized:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not authorized to do this")  
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not authorized to do this")
+    except NotFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found with this id.")
+    except DoesntExist:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Venue does not exist with the given id")
+    return result

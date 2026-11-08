@@ -19,3 +19,7 @@ class AlreadyExists(Exception):
 
 class Unauthorized(Exception):
     pass
+
+
+class DoesntExist(Exception):
+    pass

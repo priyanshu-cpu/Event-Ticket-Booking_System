@@ -28,5 +28,6 @@ class EventUpdate(BaseModel):
     name: str | None = None
     venue_id : int | None = None
     description: str | None = None
+    status: EventStatus
     ticket_price: int | None = None
     starts_at : datetime | None = None

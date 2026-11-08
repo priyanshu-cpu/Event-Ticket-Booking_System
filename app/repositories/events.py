@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select,func, exists
 from app.models.event import Event
-from app.schemas.event import EventCreate
+from app.schemas.event import EventCreate, EventUpdate
 
 
 
@@ -32,3 +32,18 @@ async def create_event(event:EventCreate, db:AsyncSession):
     await db.refresh(new_event)
     
     return new_event
+
+
+async def update_event(update_data:dict, event:Event, db:AsyncSession):
+    for field, value in update_data.items():
+        setattr(event, field, value)
+
+    await db.commit()
+    await db.refresh(event)
+    return event
+
+
+async def delete_event(event: Event, db:AsyncSession):
+    await db.delete(event)
+    await db.commit()
+    return 
