@@ -10,5 +10,6 @@ class Settings(BaseSettings):
     SECRET_KEY: SecretStr
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     SECRET_EMAIL: SecretStr
+    REDIS_URL: str 
 
 settings = Settings()
