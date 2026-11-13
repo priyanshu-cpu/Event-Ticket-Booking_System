@@ -10,3 +10,4 @@ wheels/
 .venv
 .env 
 .env.docker
+admin_dummy.txt
