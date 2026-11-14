@@ -18,4 +18,5 @@ class BookingResponse(BookingBase):
     id: int
     user_id: int
     status: BookingStatus
+    hold_expires_at: datetime | None = None
     created_at: datetime | None = None

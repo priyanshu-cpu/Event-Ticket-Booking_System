@@ -23,3 +23,18 @@ class Unauthorized(Exception):
 
 class DoesntExist(Exception):
     pass
+
+class EventNotFound(Exception):
+    pass
+
+class SeatNotFound(Exception):
+    pass
+
+class SeatDoesNotBelong(Exception):
+    pass
+
+class SeatHeldOrBooked(Exception):
+    pass
+
+class SeatHeld(Exception):
+    pass
