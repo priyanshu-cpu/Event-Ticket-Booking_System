@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, exists
+from sqlalchemy import select, update
 from app.models.booking import Booking
 from app.schemas.bookings import BookingResponse, BookingCreate, BookingStatus
 from app.models.user import User
@@ -50,3 +50,9 @@ async def create_booking(
         await db.commit()
         await db.refresh()
     return new_booking
+
+
+async def check_expired_booking(event_id: int, seat_id: int, db: AsyncSession, status: BookingStatus, current_time):
+    result = await db.scalar(update(Booking).where(Booking.event_id == event_id, Booking.seat_id == seat_id, Booking.status == status,Booking.hold_expires_at < current_time).values(status= "expired"))
+
+    return result

@@ -9,3 +9,4 @@ class BookingStatus(str, enum.Enum):
     pending = "pending"
     held = "held"
     confirmed = "confirmed"
+    expired = "expired"
