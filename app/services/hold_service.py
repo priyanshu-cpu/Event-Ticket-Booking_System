@@ -21,3 +21,18 @@ async def check_seat_hold(event_id: int, seat_id: int):
     key = get_seat_hold_key(event_id, seat_id)
     return await redis_client.get(key)
 
+
+async def release_seat(event_id: int, seat_id: int, user_id: int):
+    key = get_seat_hold_key(event_id, seat_id)
+
+    script = """
+    if redis.call('GET', KEYS[1]) == ARGV[1] then
+        return redis.call('DEL', KEYS[1])
+    else
+        return 0
+    end
+"""
+
+    result = redis_client.eval(script, 1, key, str(user_id))
+
+    return result == 1

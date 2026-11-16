@@ -61,6 +61,7 @@ async def create_booking(booking: BookingCreate, user: User, db: AsyncSession):
         return new_booking
     except Exception:
         await db.rollback()
+        await hold_service.release_seat(booking.event_id, booking.seat_id, user.id)
 
 
 async def check_expired_booking(event_id: int, seat_id: int, db: AsyncSession):
