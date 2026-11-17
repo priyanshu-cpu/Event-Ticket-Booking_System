@@ -38,3 +38,6 @@ class SeatHeldOrBooked(Exception):
 
 class SeatHeld(Exception):
     pass
+
+class CanNotConfirm(Exception):
+    pass

@@ -9,7 +9,9 @@ from app.core.exceptions import (
     SeatNotFound,
     SeatDoesNotBelong,
     SeatHeldOrBooked,
-    SeatHeld
+    SeatHeld,
+    Unauthorized,
+    CanNotConfirm
 )
 from app.schemas.bookings import BookingCreate, BookingStatus, BookingResponse
 from app.models.user import User
@@ -62,6 +64,23 @@ async def create_booking(booking: BookingCreate, user: User, db: AsyncSession):
     except Exception:
         await db.rollback()
         await hold_service.release_seat(booking.event_id, booking.seat_id, user.id)
+
+
+async def confirm_booking(booking_id: int, user: User, db: AsyncSession):
+    booking = booking_repo.get_booking_by_id(booking_id, db)
+
+    if not booking:
+        raise NotFound
+
+    if booking.user_id != user.id:
+        raise  Unauthorized
+
+    if booking.status != "held":
+        raise CanNotConfirm
+
+    current_time = datetime.now(UTC)
+
+    
 
 
 async def check_expired_booking(event_id: int, seat_id: int, db: AsyncSession):
