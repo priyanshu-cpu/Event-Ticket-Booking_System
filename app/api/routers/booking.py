@@ -10,7 +10,12 @@ from app.core.exceptions import (
     SeatNotFound,
     SeatDoesNotBelong,
     SeatHeldOrBooked,
-    SeatHeld
+    SeatHeld,
+    Unauthorized,
+    CanNotConfirm,
+    BookingHoldHasExpired,
+    PaymentFailed,
+    SomethingWentWrong
 )
 from app.models.user import User 
 from app.utils.security import get_current_user
@@ -52,3 +57,22 @@ async def create_booking(booking: BookingCreate, user: CurrentUser, db: DbSessio
     except SeatHeld:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Seat is held")
     return new_booking
+
+
+@router.post("/{booking_id}/confirm", response_model=BookingResponse)
+async def confirm_booking(booking_id: int, user: CurrentUser, db: DbSession):
+    try:
+        booking = await booking_service.confirm_booking(booking_id, user, db)
+    except NotFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Booking not found")
+    except Unauthorized:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You can not confirm someone else's booking")
+    except CanNotConfirm:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Can not confirm booking with status {booking.status}")
+    except BookingHoldHasExpired:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="seat hold has expired")
+    except PaymentFailed:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Payment failed")
+    except Exception:
+        raise 
+    return booking

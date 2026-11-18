@@ -11,7 +11,10 @@ from app.core.exceptions import (
     SeatHeldOrBooked,
     SeatHeld,
     Unauthorized,
-    CanNotConfirm
+    CanNotConfirm,
+    BookingHoldHasExpired,
+    PaymentFailed,
+    SomethingWentWrong
 )
 from app.schemas.bookings import BookingCreate, BookingStatus, BookingResponse
 from app.models.user import User
@@ -36,7 +39,7 @@ async def create_booking(booking: BookingCreate, user: User, db: AsyncSession):
     if not event:
         raise EventNotFound
 
-    seat = await seat_repo.get_seat_by_id(booking.seat_id, db)
+    seat = await seat_repo.get_seat_for_update(booking.seat_id, db)
     if not seat:
         raise SeatNotFound
 
@@ -57,30 +60,54 @@ async def create_booking(booking: BookingCreate, user: User, db: AsyncSession):
 
     try:
         expires = datetime.now(UTC) + timedelta(minutes=10)
-        new_booking = await booking_repo.create_booking(booking, user, status=BookingStatus.held, expires=expires, db=db, commit=False)
-        db.commit()
+        new_booking = await booking_repo.create_booking(booking, user, BookingStatus.held, expires, db, commit=False)
+        await db.commit()
         await db.refresh(new_booking)
         return new_booking
     except Exception:
         await db.rollback()
         await hold_service.release_seat(booking.event_id, booking.seat_id, user.id)
+        raise
 
 
 async def confirm_booking(booking_id: int, user: User, db: AsyncSession):
-    booking = booking_repo.get_booking_by_id(booking_id, db)
+    booking = await booking_repo.get_booking_by_id(booking_id, db, user)
 
     if not booking:
         raise NotFound
 
     if booking.user_id != user.id:
-        raise  Unauthorized
+        raise Unauthorized
 
     if booking.status != "held":
         raise CanNotConfirm
 
     current_time = datetime.now(UTC)
 
-    
+    if(booking.hold_expires_at is None or booking.hold_expires_at< current_time):
+        await booking_repo.update_booking_status(booking, BookingStatus.expired, db)
+        db.commit()
+
+        await hold_service.release_seat(booking.event_id, booking.seat_id, user.id)
+        raise BookingHoldHasExpired
+
+    try:
+        payment_success = True
+        if not payment_success:
+            raise PaymentFailed
+
+        await booking_repo.update_booking_status(booking, BookingStatus.confirmed, db)
+
+        db.commit()
+        await db.refresh(booking)
+
+    except Exception:
+        await db.rollback()
+        raise 
+
+    await hold_service.release_seat(booking.event_id, booking.seat_id, user.id)
+
+    return booking
 
 
 async def check_expired_booking(event_id: int, seat_id: int, db: AsyncSession):

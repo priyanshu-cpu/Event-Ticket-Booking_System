@@ -67,3 +67,9 @@ async def check_expired_booking(
     )
 
     return result
+
+
+async def update_booking_status(booking: Booking, status: BookingStatus, db: AsyncSession):
+    booking.status = status
+    await db.flush()
+    return booking

@@ -41,3 +41,12 @@ class SeatHeld(Exception):
 
 class CanNotConfirm(Exception):
     pass
+
+class BookingHoldHasExpired(Exception):
+    pass
+
+class PaymentFailed(Exception):
+    pass
+
+class SomethingWentWrong(Exception):
+    pass
