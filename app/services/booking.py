@@ -86,7 +86,7 @@ async def confirm_booking(booking_id: int, user: User, db: AsyncSession):
 
     if(booking.hold_expires_at is None or booking.hold_expires_at< current_time):
         await booking_repo.update_booking_status(booking, BookingStatus.expired, db)
-        db.commit()
+        await db.commit()
 
         await hold_service.release_seat(booking.event_id, booking.seat_id, user.id)
         raise BookingHoldHasExpired
@@ -98,7 +98,7 @@ async def confirm_booking(booking_id: int, user: User, db: AsyncSession):
 
         await booking_repo.update_booking_status(booking, BookingStatus.confirmed, db)
 
-        db.commit()
+        await db.commit()
         await db.refresh(booking)
 
     except Exception:
