@@ -2,7 +2,7 @@ from app.redis.client import redis_client
 from app.redis.keys import get_seat_hold_key
 
 
-HOLD_DURATION = 300
+HOLD_DURATION = 600
 
 
 async def hold_seat(event_id: int, seat_id: int, user_id: int):

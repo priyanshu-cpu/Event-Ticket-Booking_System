@@ -55,7 +55,7 @@ async def create_booking(
 async def check_expired_booking(
     event_id: int, seat_id: int, db: AsyncSession, status: BookingStatus, current_time
 ):
-    result = await db.scalar(
+    result = await db.execute(
         update(Booking)
         .where(
             Booking.event_id == event_id,
@@ -63,7 +63,7 @@ async def check_expired_booking(
             Booking.status == status,
             Booking.hold_expires_at < current_time,
         )
-        .values(status="expired")
+        .values(status=BookingStatus.expired)
     )
 
     return result

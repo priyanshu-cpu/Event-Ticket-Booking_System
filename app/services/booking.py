@@ -46,7 +46,7 @@ async def create_booking(booking: BookingCreate, user: User, db: AsyncSession):
     if not seat.venue_id == event.venue_id:
         raise SeatDoesNotBelong
 
-    check_expired_booking(booking.event_id, booking.seat_id, db)
+    await check_expired_booking(booking.event_id, booking.seat_id, db)
 
     check_booking = await booking_repo.get_booking_by_event_and_seat(booking.event_id, booking.seat_id, db)
     if check_booking:
@@ -112,4 +112,4 @@ async def confirm_booking(booking_id: int, user: User, db: AsyncSession):
 
 async def check_expired_booking(event_id: int, seat_id: int, db: AsyncSession):
     current_time = datetime.now(UTC)
-    return await booking_repo.check_expired_booking(event_id, seat_id, db, current_time, status="held")
+    return await booking_repo.check_expired_booking(event_id=event_id, seat_id=seat_id, db=db, status=BookingStatus.held, current_time=datetime.now(UTC))
