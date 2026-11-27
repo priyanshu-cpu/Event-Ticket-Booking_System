@@ -35,6 +35,7 @@ The application supports user registration, JWT authentication, temporary seat h
 | Password hashing | pwdlib with Argon2 |
 | Database migrations | Alembic |
 | Dependency management | uv or pip |
+| Containerization | Docker and Docker Compose |
 
 ## Project Structure
 
@@ -56,6 +57,9 @@ alembic/
 ├── versions/          # Database migration revisions
 └── env.py             # Migration configuration
 
+Dockerfile
+docker-compose.yml
+.dockerignore
 alembic.ini
 pyproject.toml
 requirements.txt
@@ -69,6 +73,111 @@ API Router → Service → Repository → PostgreSQL
                  │
                  └── Redis seat holds
 ```
+
+
+## Running with Docker Compose
+
+### Prerequisites
+
+- Docker with Docker Compose
+- A Dockerfile that starts the API on `0.0.0.0:8000`
+
+### 1. Configure the Environment
+
+Create `.env.docker` in the project root:
+
+```dotenv
+POSTGRES_USER=postres...
+POSTGRES_PASSWORD=replace_with_your_password...
+POSTGRES_DB=postgres...
+
+DB_CONNECTION=postgresql+asyncpg://etbs:replace_with_your_password@db:5432/<your db name>
+REDIS_URL=redis://redis:6379/0
+
+SECRET_KEY=replace_with_a_random_signing_secret
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+SECRET_EMAIL=....
+```
+
+Replace the placeholder credentials before starting. Keep the database
+password consistent in `POSTGRES_PASSWORD` and `DB_CONNECTION`.
+URL-encode special characters in the connection URL's password.
+
+Containers connect through the Compose service names `db` and `redis`,
+rather than `localhost`.
+
+Keep `.env.docker` out of version control and the Docker build context.
+
+### 2. Prepare the Database
+
+Compose health checks confirm that PostgreSQL and Redis are ready. 
+The application's Dockerfile then runs alembic upgrade head before starting the API. 
+If migrations fail, the API will not start.
+
+```bash
+docker compose up -d db redis
+docker compose run --rm app alembic upgrade head
+```
+
+Seat records must be provisioned separately because no seat-creation
+endpoint or seed script is currently included.
+
+### 3. Start the Application
+
+Run from the project root:
+
+```bash
+docker compose up --build
+```
+
+To run in the background:
+
+```bash
+docker compose up --build -d
+```
+
+Open the interactive API documentation at:
+
+http://localhost:8000/docs
+
+### Services and Storage
+
+| Service | Purpose |
+| --- | --- |
+| `app` | FastAPI application exposed on port `8000` |
+| `db` | PostgreSQL 17 database |
+| `redis` | Redis server for temporary seat holds |
+
+The application waits for PostgreSQL and Redis health checks to pass
+before starting.
+
+PostgreSQL stores its data in the `pgdata` volume. Redis uses append-only
+persistence with the `redisdata` volume. Database and Redis ports are
+accessible internally without being published to the host.
+
+### Useful Commands
+
+Check service status:
+
+```bash
+docker compose ps
+```
+
+Follow application logs:
+
+```bash
+docker compose logs -f app
+```
+
+Stop and remove containers while retaining data volumes:
+
+```bash
+docker compose down
+```
+
+> `docker compose down -v` also deletes the database and Redis volumes.
+
 
 ## Local Development
 

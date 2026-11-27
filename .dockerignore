@@ -1,0 +1,45 @@
+# Local Python environments
+.venv/
+venv/
+env/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+admin_dummy.txt
+
+# Git and editor files
+.git/
+.github/
+.vscode/
+.idea/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Tests and local logs
+test/
+tests/
+*.log
+
+# Local agent configuration
+.agents/
+.codex/
+.aws/
+
+# Operating system files
+.DS_Store
+Thumbs.db
